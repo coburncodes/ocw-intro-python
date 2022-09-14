@@ -1,5 +1,6 @@
 import time
 import math
+from xml.sax.handler import property_declaration_handler
 
 def main():
     print("\nWelcome to MIT's Intro to Python Course!\n")
@@ -20,7 +21,10 @@ def main():
         else:
             if selection == 0:
                 pset0()
-            break
+                break
+            if selection == 1:
+                pset1()
+                break
 
 def pset0():
     print("Welcome to pset0!")
@@ -41,6 +45,44 @@ def pset0():
 
     s5 = math.cos(3.4)**2 + math.sin(3.4)**2
     print("5) cos(3.4)^2 + sin(3.4)^2 =", s5)
+
+def pset1():
+    print("Welcome to pset1!")
+    input("Hit enter to see the solutions for Parts A-C: ")
+    
+    print("\nPart A: House Hunting\n")
+    print("Calculate how many months it will take to save enough for a down payment.\n")
+    time.sleep(1)
+
+    portion_down_payment = 0.25
+    current_savings = 0
+    r = 0.04
+    annual_salary = input("Enter your annual salary: ")
+    if len(annual_salary) < 1:
+        annual_salary = 120000
+    portion_saved = input("Enter the percent of your salary to save, as a decimal: ")
+    if len(portion_saved) < 1:
+        portion_saved = 0.1
+    total_cost = input("Enter the cost of your dream home: ")
+    if len(total_cost) < 1:
+        total_cost = 1000000
+
+    annual_salary = int(annual_salary)
+    portion_saved = float(portion_saved)
+    total_cost = int(total_cost)
+
+    down_payment_cost = total_cost * portion_down_payment
+    monthly_salary = annual_salary / 12
+    monthly_addition = monthly_salary * portion_saved
+    month_count = 1
+
+    while current_savings < down_payment_cost:
+        current_savings += monthly_addition
+        monthly_interest = current_savings * (r / 12)
+        current_savings = current_savings + (monthly_interest)
+        month_count += 1
+
+    print("Number of months:", month_count)
 
 
 
