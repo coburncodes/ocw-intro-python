@@ -1,5 +1,6 @@
 import time
 import math
+import random
 
 def main():
     print("\nWelcome to MIT's Intro to Python Course!\n")
@@ -141,9 +142,75 @@ def pset1():
 
         print("Number of months:", month_count)
 
+    elif part == "C":
+        # Find the percentage of your salary to save
+        # in order to get to $250K in 36 months.
+        # You get a 7% raise twice a year and 
+        # you get a 4% return on your savings.
+        print("\nPart C: Finding the right amount to save away\n")
+        print("Calculate how much you should save each month to achieve your goal.\n")
+        time.sleep(0.5)  
+    
+# User inputs
+annual_salary = input("Enter your annual salary: ")
+if len(annual_salary) < 1:
+    annual_salary = 150000
 
-    else:
-        print("Must enter A, B, or C")
+# Cast types
+annual_salary = int(annual_salary)
+
+# Set variables
+semi_annual_raise = 0.07
+r = 0.04
+portion_down_payment = 0.25
+total_cost = 1000000
+month_count = 0
+total_months = 36
+current_savings = 0
+
+# Calculated variables
+down_payment_cost = total_cost * portion_down_payment
+
+# Create options list
+rates = []
+i = 0
+while i < 10000:
+    rates.append(i + 1)
+    i += 1
+
+# Choose a test number using bisection search
+# Testing...
+num = random.randrange(1,10000)
+rate = num/10000.0
+print("Rate: ", rate)
+
+# Loop until goal
+while current_savings < down_payment_cost:
+    # Increase salary every 6 months
+    if month_count > 0 and (month_count % 6) == 0:
+        annual_salary += annual_salary * semi_annual_raise
+    monthly_salary = annual_salary / 12
+    monthly_addition = monthly_salary * rate
+    # First month won't gain any interest
+    if month_count >= 1:
+        monthly_interest = current_savings * r / 12
+        current_savings += monthly_interest
+    current_savings += monthly_addition
+    month_count += 1
+    print("*********")
+    print("MONTH", month_count)
+    print("Current Savings:", current_savings)
+    print("Current Salary:", annual_salary)
+
+
+
+
+print("Number of months:", month_count)
+
+exit()
+    
+    # else:
+    #     print("Must enter A, B, or C")
 
 
 
