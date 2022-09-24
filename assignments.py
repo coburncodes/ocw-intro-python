@@ -151,66 +151,77 @@ def pset1():
         print("Calculate how much you should save each month to achieve your goal.\n")
         time.sleep(0.5)  
     
-# User inputs
-annual_salary = input("Enter your annual salary: ")
-if len(annual_salary) < 1:
-    annual_salary = 150000
+        # User input
+        annual_salary = input("Enter the starting salary: ")
+        if len(annual_salary) < 1:
+            annual_salary = 150000
 
-# Cast types
-annual_salary = int(annual_salary)
+        # Cast type
+        annual_salary = int(annual_salary)
 
-# Set variables
-semi_annual_raise = 0.07
-r = 0.04
-portion_down_payment = 0.25
-total_cost = 1000000
-month_count = 0
-total_months = 36
-current_savings = 0
+        # Set variables
+        semi_annual_raise = 0.07
+        r = 0.04
+        portion_down_payment = 0.25
+        total_cost = 1000000
+        month_count = 0
+        current_savings = 0
+        down_payment_cost = total_cost * portion_down_payment
+        steps = 0
 
-# Calculated variables
-down_payment_cost = total_cost * portion_down_payment
+        # Create rate options list
+        rates = []
+        i = 0
+        while i < 10000:
+            rates.append(i + 1)
+            i += 1
 
-# Create options list
-rates = []
-i = 0
-while i < 10000:
-    rates.append(i + 1)
-    i += 1
+        check(rates, month_count, annual_salary, semi_annual_raise, current_savings, r, down_payment_cost, steps)
 
-# Choose a test number using bisection search
-# Testing...
-num = random.randrange(1,10000)
-rate = num/10000.0
-print("Rate: ", rate)
+    else:
+        print("Must input either A, B, or C")
 
-# Loop until goal
-while current_savings < down_payment_cost:
-    # Increase salary every 6 months
-    if month_count > 0 and (month_count % 6) == 0:
-        annual_salary += annual_salary * semi_annual_raise
-    monthly_salary = annual_salary / 12
-    monthly_addition = monthly_salary * rate
-    # First month won't gain any interest
-    if month_count >= 1:
-        monthly_interest = current_savings * r / 12
-        current_savings += monthly_interest
-    current_savings += monthly_addition
-    month_count += 1
-    print("*********")
-    print("MONTH", month_count)
-    print("Current Savings:", current_savings)
-    print("Current Salary:", annual_salary)
+# Check if a test rate is the right number
+def check(rates, month_count, annual_salary, semi_annual_raise, current_savings, r, down_payment_cost, steps):
+    # Pick a test rate from the middle of our list
+    test_num = rates[int(len(rates) / 2) - 1]
+    test_rate = test_num/10000.0
+    if test_num == 10000:
+        print("It is not possible to pay the down payment in three years.")
+        return 0
 
-
-
-
-print("Number of months:", month_count)
-
-exit()
+    # See how much savings come from this rate
+    test_savings = get_savings(month_count, annual_salary, semi_annual_raise, test_rate, current_savings, r)
+    steps += 1
     
-    # else:
-    #     print("Must enter A, B, or C")
+    # If savings aren't within $100 of down payment
+    if (abs(down_payment_cost - test_savings) > 100):
+        half_rates = int(len(rates) / 2)
+        # Remove half the list and re-check
+        if (test_savings > down_payment_cost):
+            del rates[half_rates:len(rates)]
+            check(rates, month_count, annual_salary, semi_annual_raise, current_savings, r, down_payment_cost, steps)
+        else:
+            del rates[0:half_rates]
+            check(rates, month_count, annual_salary, semi_annual_raise, current_savings, r, down_payment_cost, steps)
+    else:
+        print("Best savings rate:", test_rate)
+        print("Steps in bisection search:", steps)
+
+def get_savings(month_count, annual_salary, semi_annual_raise, test_rate, current_savings, r):
+    while month_count <= 35:
+        # Increase salary every 6 months
+        if month_count > 0 and (month_count % 6) == 0:
+            annual_salary += annual_salary * semi_annual_raise
+        monthly_salary = annual_salary / 12
+        monthly_addition = monthly_salary * test_rate
+        # First month won't gain any interest
+        if month_count >= 1:
+            monthly_interest = current_savings * r / 12
+            current_savings += monthly_interest
+        current_savings += monthly_addition
+        month_count += 1
+    return current_savings
 
 
 
