@@ -52,9 +52,8 @@ def p2():
     s = "azcbobobegghakl"
     key = "bob"
     count = 0
-    i = 0
 
-    while i < len(s):
+    for i in range(len(s)):
         if s[i:i+2] == key[0:2]:
             count += 1
         i += 1
