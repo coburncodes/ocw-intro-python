@@ -130,14 +130,12 @@ def u2p2():
     # which does not change each month, but instead is a constant 
     # amount that will be paid each month.
     minimum = 0.0
-    count = 0
 
     while True:
         minimum += 10
-        count += 1
         if check_minimum(minimum) <= 0:
             break
-    print("Lowest Payment:", count * 10)
+    print("Lowest Payment:", int(minimum))
 
 def check_minimum(test_amount):
     balance = 3926
