@@ -1,3 +1,4 @@
+from calendar import month
 import time
 
 def main():
@@ -25,9 +26,10 @@ def main():
             if selection == "2.1":
                 u2p1()
                 break
-
+            if selection == "2.2":
+                u2p2()
+                break
     
-
 def u1p1():
     # Assume s is a string of lower case characters.
     # Write a program that counts up the number of vowels contained 
@@ -100,6 +102,7 @@ def u1p3():
     print("Longest substring in alphabetical order is:", "".join(longest))
 
 
+
 def u2p1():
     # Write a program to calculate the credit card balance 
     # after one year if a person only pays the minimum monthly 
@@ -120,6 +123,30 @@ def u2p1():
     
     print("Remaining balance:", round(balance, 2))
 
+def u2p2():
+    # Now write a program that calculates the minimum fixed monthly 
+    # payment needed in order pay off a credit card balance within 
+    # 12 months. By a fixed monthly payment, we mean a single number 
+    # which does not change each month, but instead is a constant 
+    # amount that will be paid each month.
+    count = -1
 
+    for i in range(0, 10000, 10):
+        count += 1
+        if check_minimum(i) <= 0:
+            break
+        else:
+            continue
+    print("Lowest Payment:", count * 10)
+
+def check_minimum(test_amount):
+    balance = 4773
+    annual_interest_rate = 0.2
+    monthly_interest_rate = annual_interest_rate / 12.0
+
+    for i in range(12):
+        balance = (balance - test_amount) * (1 + monthly_interest_rate)
+    
+    return balance
 
 main()
