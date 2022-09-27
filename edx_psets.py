@@ -129,18 +129,18 @@ def u2p2():
     # 12 months. By a fixed monthly payment, we mean a single number 
     # which does not change each month, but instead is a constant 
     # amount that will be paid each month.
-    count = -1
+    minimum = 0.0
+    count = 0
 
-    for i in range(0, 10000, 10):
+    while True:
+        minimum += 10
         count += 1
-        if check_minimum(i) <= 0:
+        if check_minimum(minimum) <= 0:
             break
-        else:
-            continue
     print("Lowest Payment:", count * 10)
 
 def check_minimum(test_amount):
-    balance = 4773
+    balance = 3926
     annual_interest_rate = 0.2
     monthly_interest_rate = annual_interest_rate / 12.0
 
