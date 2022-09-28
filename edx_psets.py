@@ -29,6 +29,9 @@ def main():
             if selection == "2.2":
                 u2p2()
                 break
+            if selection == "2.3":
+                u2p3()
+                break
     
 def u1p1():
     # Assume s is a string of lower case characters.
@@ -123,6 +126,7 @@ def u2p1():
     
     print("Remaining balance:", round(balance, 2))
 
+
 def u2p2():
     # Now write a program that calculates the minimum fixed monthly 
     # payment needed in order pay off a credit card balance within 
@@ -146,5 +150,38 @@ def check_minimum(test_amount):
         balance = (balance - test_amount) * (1 + monthly_interest_rate)
     
     return balance
+
+
+def u2p3():
+    # Do the same thing as Unit 2 Problem 2 but using bisection search
+    # to estimate to the cent and reduce time 
+
+    balance = 999999
+    annual_interest_rate = 0.18
+
+    test_amount = 0.00
+
+    while True:
+        # TODO: Change this loop to bisection search
+        test_amount += 0.01
+        if check_minimum_bisection(balance, annual_interest_rate, test_amount) <= 0:
+            break
+
+    print("Lowest Payment:", round(test_amount, 2))
+
+def check_minimum_bisection(balance, annual_interest_rate, test_amount):
+
+    monthly_interest_rate = annual_interest_rate / 12.0
+    monthly_payment_lower_bound = balance / 12
+    monthly_payment_upper_bound = balance * ((1 + monthly_interest_rate)**12) / 12.0
+
+    for i in range(12):
+        balance = (balance - test_amount) * (1 + monthly_interest_rate)
+    
+    return balance
+
+
+
+
 
 main()
