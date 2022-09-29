@@ -1,4 +1,5 @@
 from calendar import month
+from cgi import test
 import time
 
 def main():
@@ -158,23 +159,36 @@ def u2p3():
 
     balance = 999999
     annual_interest_rate = 0.18
+    monthly_interest_rate = annual_interest_rate / 12.0
+    monthly_payment_lower_bound = round((balance / 12), 2)
+    monthly_payment_upper_bound = round((balance * ((1 + monthly_interest_rate)**12) / 12.0), 2)
+    
+    # Populate options list
+    options = []
+    lb_100 = int(monthly_payment_lower_bound * 100)
+    ub_100 = int(monthly_payment_upper_bound * 100)
+    for i in range(lb_100, ub_100):
+        options.append(i)
 
-    test_amount = 0.00
+    options_copy = options
 
     while True:
-        # TODO: Change this loop to bisection search
-        test_amount += 0.01
-        if check_minimum_bisection(balance, annual_interest_rate, test_amount) <= 0:
+        print("Lenght", len(options_copy))
+        test_amount = options_copy[int((len(options_copy) / 2))]
+        print("test:", test_amount)
+
+        if abs(check_minimum_bisection(balance, monthly_interest_rate, test_amount) < 0.06):
+            print("Key rate:", test_amount / 100)
             break
+        elif check_minimum_bisection(balance, monthly_interest_rate, test_amount) < 0.06:
+            del options_copy[int((len(options_copy) / 2)):len(options_copy)]
+        else:
+            del options_copy[0:int((len(options_copy) / 2))]
 
     print("Lowest Payment:", round(test_amount, 2))
 
-def check_minimum_bisection(balance, annual_interest_rate, test_amount):
-
-    monthly_interest_rate = annual_interest_rate / 12.0
-    monthly_payment_lower_bound = balance / 12
-    monthly_payment_upper_bound = balance * ((1 + monthly_interest_rate)**12) / 12.0
-
+def check_minimum_bisection(balance, monthly_interest_rate, test_amount):
+    test_amount = test_amount / 100
     for i in range(12):
         balance = (balance - test_amount) * (1 + monthly_interest_rate)
     
