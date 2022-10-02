@@ -1,5 +1,4 @@
 from calendar import month
-from cgi import test
 import time
 
 def main():
@@ -170,28 +169,22 @@ def u2p3():
     for i in range(lb_100, ub_100):
         options.append(i)
 
-    options_copy = options
+    # Run bisection search until left with one key value
+    while len(options) > 1:
+        test_amount = options[int((len(options) / 2))]
 
-    while True:
-        print("Lenght", len(options_copy))
-        test_amount = options_copy[int((len(options_copy) / 2))]
-        print("test:", test_amount)
-
-        if abs(check_minimum_bisection(balance, monthly_interest_rate, test_amount) < 0.06):
-            print("Key rate:", test_amount / 100)
-            break
-        elif check_minimum_bisection(balance, monthly_interest_rate, test_amount) < 0.06:
-            del options_copy[int((len(options_copy) / 2)):len(options_copy)]
+        if check_minimum_bisection(balance, monthly_interest_rate, test_amount) < 0:
+            del options[int((len(options) / 2)):len(options)]
         else:
-            del options_copy[0:int((len(options_copy) / 2))]
+            del options[0:int((len(options) / 2))]
 
-    print("Lowest Payment:", round(test_amount, 2))
+    print("Lowest Payment:", options[0] / 100.0)
 
 def check_minimum_bisection(balance, monthly_interest_rate, test_amount):
     test_amount = test_amount / 100
     for i in range(12):
         balance = (balance - test_amount) * (1 + monthly_interest_rate)
-    
+
     return balance
 
 
