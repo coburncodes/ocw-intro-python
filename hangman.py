@@ -1,7 +1,7 @@
 # Problem Set 2, hangman.py
-# Name: 
+# Name: Joseph Coburn
 # Collaborators:
-# Time spent:
+# Time spent: 2022-10-11 1:15pm - 
 
 # Hangman Game
 # -----------------------------------
@@ -9,6 +9,8 @@
 # You don't need to understand this helper code,
 # but you will have to know how to use the functions
 # (so be sure to read the docstrings!)
+from curses.ascii import isalnum
+from operator import is_
 import random
 import string
 
@@ -60,8 +62,10 @@ def is_word_guessed(secret_word, letters_guessed):
     returns: boolean, True if all the letters of secret_word are in letters_guessed;
       False otherwise
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    for char in secret_word:
+        if char not in letters_guessed:
+            return False
+    return True
 
 
 
@@ -72,8 +76,16 @@ def get_guessed_word(secret_word, letters_guessed):
     returns: string, comprised of letters, underscores (_), and spaces that represents
       which letters in secret_word have been guessed so far.
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+
+    current = []
+
+    for char in secret_word:
+        if char in letters_guessed:
+            current.append(char)
+        else:
+            current.append("_ ")
+    
+    return "".join(current)
 
 
 
@@ -83,8 +95,13 @@ def get_available_letters(letters_guessed):
     returns: string (of letters), comprised of letters that represents which letters have not
       yet been guessed.
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    all = [*string.ascii_lowercase]
+
+    for char in letters_guessed:
+        if char in all:
+            all.remove(char)
+            
+    return "".join(all)
     
     
 
@@ -113,8 +130,49 @@ def hangman(secret_word):
     
     Follows the other limitations detailed in the problem write-up.
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    
+
+    secret_word = "apple"
+    chars = len(secret_word)
+    guesses = 6
+    letters_guessed = []
+    available_letters = get_available_letters(letters_guessed)
+
+    print("Welcome to the game Hangman!")
+    print("I am thinking of a word that is", chars, "letters long.")
+
+    while guesses > 0:
+        print("-------------")
+        print("You have", guesses, "guesses left.")
+        print("Available letters:", available_letters)
+
+        while True:
+            guess = input("Please guess a letter: ")
+            if len(guess) > 1:
+                print("Oops! One letter ar a time!\n")
+            else:
+                if guess.isalpha():
+                    break
+                else:
+                    print("Oops! That is not a letter.\n")
+        
+        guess = guess.lower()
+        letters_guessed.append(guess)
+
+        if is_word_guessed(secret_word, letters_guessed):
+            print("You win! The secret word was", secret_word, "!")
+            break
+        else:
+            if guess in secret_word:
+                print("Good guess: ", end="")
+                available_letters = get_available_letters(letters_guessed)
+            else:
+                print("Oops! That letter is not in my word: ", end="")
+                guesses -= 1
+                available_letters = get_available_letters(letters_guessed)
+            print(get_guessed_word(secret_word, letters_guessed))
+    
+
 
 
 
@@ -209,5 +267,5 @@ if __name__ == "__main__":
     # To test part 3 re-comment out the above lines and 
     # uncomment the following two lines. 
     
-    #secret_word = choose_word(wordlist)
-    #hangman_with_hints(secret_word)
+    secret_word = choose_word(wordlist)
+    hangman_with_hints(secret_word)

@@ -25,6 +25,9 @@ def main():
             if selection == 1:
                 pset1()
                 break
+            if selection == 2:
+                pset2()
+                break
 
 def pset0():
     print("Welcome to pset0!")
