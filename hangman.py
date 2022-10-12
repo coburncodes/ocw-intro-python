@@ -137,6 +137,7 @@ def hangman(secret_word):
     guesses = 6
     letters_guessed = []
     available_letters = get_available_letters(letters_guessed)
+    warnings = 3
 
     print("Welcome to the game Hangman!")
     print("I am thinking of a word that is", chars, "letters long.")
@@ -148,14 +149,37 @@ def hangman(secret_word):
 
         while True:
             guess = input("Please guess a letter: ")
-            if len(guess) > 1:
-                print("Oops! One letter ar a time!\n")
-            else:
-                if guess.isalpha():
-                    break
+            # Valid guess
+            if guess.isalpha():
+                # Already guessed letter?
+                if guess not in available_letters:
+                    # Lose a warning
+                    warnings -= 1
+                    # If still have warnings
+                    if warnings > 0:
+                        # Response
+                        print("Oops! You've already guessed that letter. You now have", warnings, "warnings left:", get_guessed_word(secret_word, letters_guessed))
+                    # Else no warnings left
+                    else:
+                        # Lose a guess
+                        print("You're out of warnings. Now you lose a guess. And I'm mad at you.", get_guessed_word(secret_word, letters_guessed))
+                        guesses -= 1
+                # Else valid and not guessed
+                break
+            # Invald guess (isnt alpha)
+            else: 
+                # Lose a warning
+                warnings -= 1
+                # If still have warnings
+                if warnings > 0:
+                    # Response
+                    print("Oops! That is not a valid letter. You have", warnings, "warnings left:", get_guessed_word(secret_word, letters_guessed))
+                # Else no warnings left
                 else:
-                    print("Oops! That is not a letter.\n")
-        
+                    # Lose a guess
+                    print("You're out of warnings. Now you lose a guess. And I'm mad at you.", get_guessed_word(secret_word, letters_guessed))
+                    guesses -= 1
+
         guess = guess.lower()
         letters_guessed.append(guess)
 
