@@ -132,7 +132,7 @@ def hangman(secret_word):
     Follows the other limitations detailed in the problem write-up.
     '''
     
-
+    secret_word = "tart"
     chars = len(secret_word)
     guesses = 6
     letters_guessed = []
@@ -158,13 +158,13 @@ def hangman(secret_word):
                 if warnings > 0:
                     # Response
                     print("Oops! You've already guessed that letter. You now have", warnings, "warnings left:", get_guessed_word(secret_word, letters_guessed))
-                    break
+                    continue
                 # Else no warnings left
                 else:
                     # Lose a guess
                     print("You're out of warnings. Now you lose a guess.", get_guessed_word(secret_word, letters_guessed))
                     guesses -= 1
-                    break
+                    continue
             # Else valid and not guessed
             letters_guessed.append(guess.lower())
             # If that solves the word
@@ -201,7 +201,6 @@ def hangman(secret_word):
                 # Lose a guess
                 print("You're out of warnings. Now you lose a guess. And I'm mad at you.", get_guessed_word(secret_word, letters_guessed))
                 guesses -= 1
-    print("You're out of guesses :( Game over.")
     
 
 
