@@ -9,6 +9,7 @@
 # You don't need to understand this helper code,
 # but you will have to know how to use the functions
 # (so be sure to read the docstrings!)
+from ast import Break
 from curses.ascii import isalnum
 from operator import is_
 import random
@@ -132,12 +133,12 @@ def hangman(secret_word):
     '''
     
 
-    secret_word = "apple"
     chars = len(secret_word)
     guesses = 6
     letters_guessed = []
     available_letters = get_available_letters(letters_guessed)
     warnings = 3
+    vowels = "aeiou"
 
     print("Welcome to the game Hangman!")
     print("I am thinking of a word that is", chars, "letters long.")
@@ -146,55 +147,61 @@ def hangman(secret_word):
         print("-------------")
         print("You have", guesses, "guesses left.")
         print("Available letters:", available_letters)
-
-        while True:
-            guess = input("Please guess a letter: ")
-            # Valid guess
-            if guess.isalpha():
-                # Already guessed letter?
-                if guess not in available_letters:
-                    # Lose a warning
-                    warnings -= 1
-                    # If still have warnings
-                    if warnings > 0:
-                        # Response
-                        print("Oops! You've already guessed that letter. You now have", warnings, "warnings left:", get_guessed_word(secret_word, letters_guessed))
-                    # Else no warnings left
-                    else:
-                        # Lose a guess
-                        print("You're out of warnings. Now you lose a guess. And I'm mad at you.", get_guessed_word(secret_word, letters_guessed))
-                        guesses -= 1
-                # Else valid and not guessed
-                break
-            # Invald guess (isnt alpha)
-            else: 
+        guess = input("Please guess a letter: ")
+        # Valid guess
+        if guess.isalpha():
+            # Already guessed letter?
+            if guess in letters_guessed:
                 # Lose a warning
                 warnings -= 1
                 # If still have warnings
                 if warnings > 0:
                     # Response
-                    print("Oops! That is not a valid letter. You have", warnings, "warnings left:", get_guessed_word(secret_word, letters_guessed))
+                    print("Oops! You've already guessed that letter. You now have", warnings, "warnings left:", get_guessed_word(secret_word, letters_guessed))
+                    break
                 # Else no warnings left
                 else:
                     # Lose a guess
-                    print("You're out of warnings. Now you lose a guess. And I'm mad at you.", get_guessed_word(secret_word, letters_guessed))
+                    print("You're out of warnings. Now you lose a guess.", get_guessed_word(secret_word, letters_guessed))
                     guesses -= 1
-
-        guess = guess.lower()
-        letters_guessed.append(guess)
-
-        if is_word_guessed(secret_word, letters_guessed):
-            print("You win! The secret word was", secret_word, "!")
-            break
-        else:
-            if guess in secret_word:
-                print("Good guess: ", end="")
-                available_letters = get_available_letters(letters_guessed)
+                    break
+            # Else valid and not guessed
+            letters_guessed.append(guess.lower())
+            # If that solves the word
+            if is_word_guessed(secret_word, letters_guessed):
+                print("You win! The secret word was", secret_word, "!")
+                break
+            # Didnt solve word
             else:
-                print("Oops! That letter is not in my word: ", end="")
+                # Got a letter
+                if guess in secret_word:
+                    print("Good guess: ", end="")
+                    available_letters = get_available_letters(letters_guessed)
+                # Guessed wrong
+                else:
+                    # Lose 2 for vowels and 1 for consonants
+                    if guess not in vowels:
+                        guesses -= 1
+                    else:
+                        guesses -= 2
+                    print("Oops! That letter is not in my word: ", end="")
+                    available_letters = get_available_letters(letters_guessed)
+                # Either way print the word with blanks
+                print(get_guessed_word(secret_word, letters_guessed))
+        # Invald guess (isnt alpha)
+        else: 
+            # Lose a warning
+            warnings -= 1
+            # If still have warnings
+            if warnings > 0:
+                # Response
+                print("Oops! That is not a valid letter. You have", warnings, "warnings left:", get_guessed_word(secret_word, letters_guessed))
+            # Else no warnings left
+            else:
+                # Lose a guess
+                print("You're out of warnings. Now you lose a guess. And I'm mad at you.", get_guessed_word(secret_word, letters_guessed))
                 guesses -= 1
-                available_letters = get_available_letters(letters_guessed)
-            print(get_guessed_word(secret_word, letters_guessed))
+    print("You're out of guesses :( Game over.")
     
 
 
