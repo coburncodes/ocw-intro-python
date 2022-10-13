@@ -132,13 +132,19 @@ def hangman(secret_word):
     Follows the other limitations detailed in the problem write-up.
     '''
     
-    secret_word = "tart"
+    secret_word = "dolphin"
     chars = len(secret_word)
     guesses = 6
     letters_guessed = []
     available_letters = get_available_letters(letters_guessed)
     warnings = 3
     vowels = "aeiou"
+    unique_letters = []
+
+    for i in range(len(secret_word)):
+        if secret_word[i] not in unique_letters:
+            unique_letters.append(secret_word[i])
+        
 
     print("Welcome to the game Hangman!")
     print("I am thinking of a word that is", chars, "letters long.")
@@ -169,7 +175,11 @@ def hangman(secret_word):
             letters_guessed.append(guess.lower())
             # If that solves the word
             if is_word_guessed(secret_word, letters_guessed):
-                print("You win! The secret word was", secret_word, "!")
+                score = guesses * len(unique_letters)
+                print("Good guess:", secret_word)
+                print("-------------")
+                print("Congratulations, you won!")
+                print("Your total score for this game is:", score)
                 break
             # Didnt solve word
             else:
@@ -202,6 +212,8 @@ def hangman(secret_word):
                 print("You're out of warnings. Now you lose a guess. And I'm mad at you.", get_guessed_word(secret_word, letters_guessed))
                 guesses -= 1
     
+    if guesses == 0:
+        print("You ran out of guesses :( The word was", secret_word)
 
 
 
