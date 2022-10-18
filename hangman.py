@@ -1,7 +1,7 @@
 # Problem Set 2, hangman.py
 # Name: Joseph Coburn
 # Collaborators:
-# Time spent: 2022-10-11 1:15pm - 
+# Time spent: 355 mins 
 
 # Hangman Game
 # -----------------------------------
