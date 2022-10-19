@@ -4,7 +4,7 @@
 # Created by: Kevin Luu <luuk> and Jenna Wiens <jwiens>
 #
 # Name          : Joe Coburn
-# Time spent    : 2022-10-18 2:30pm
+# Time spent    : 2022-10-18 2:30pm - 6:00pm (180)
 
 import math
 import random
@@ -95,7 +95,8 @@ def get_word_score(word, n):
     add = 7 * len(word) - 3 * (n - len(word))
 
     for i in range(len(word)):
-        score += SCRABBLE_LETTER_VALUES[word[i]]
+        if not word[i] == "*":
+            score += SCRABBLE_LETTER_VALUES[word[i]]
 
     if add > 1:
         score *= add
@@ -206,9 +207,7 @@ def is_valid_word(word, hand, word_list):
     """
     
     word = word.lower()
-    test_hand = hand.copy()
     success = False
-    failed = False
 
     # Make histogram for each letter in word
     word_hist = {}
@@ -220,54 +219,27 @@ def is_valid_word(word, hand, word_list):
 
     # Wildcard?
     if "*" in word:
-        # Check each vowel in place of wildcard
+        # Look for a replacement word in word_list
         for vowel in VOWELS:
             new_word = word.replace("*", vowel)
             # If a match is found, indicate it and stop checking
             if new_word in word_list:
                 success = True
-                saved_word = new_word
                 break
         # None were found in word_list
         if success == False:
             # Invalid
             return False
-        # Otherwise, wildcard worked
-        else: 
-            # Check each letter 
-            for letter in word:
-                # Is it in the hand?
-                if letter in hand.keys():
-                    # If so, does it have a non-zero value?
-                    if hand[letter] > 0:
-                        # If so, that letter is valid
-                        continue
-                    # Otherwise, the letter is 0 or less
-                    else:
-                        # Indicate that it failed and stop checking each letter
-                        failed = True
-                        break
-                # Otherwise, the letter is not in the hand
-                else:
-                    # Indicate that it failed and stop checking each letter
-                    failed = True
-                    break
-            # If each letter was checked and the program is still running,
-            # then every letter was in the hand and had a positive value.
-            # Valid
-            return True
-                
-# TODO: use word histogram to check if there are enough of each letter in hand
-    
-    if word in word_list:
-        for letter in word:
-            if letter in hand.keys():
-                test_hand[letter] -= 1
-            else:
-                return False
 
-    for entry in test_hand:
-        if test_hand[entry] < 0:
+    # Check if each letter in word is in hand
+    for letter in word:
+        if not letter in hand.keys():
+            return False
+
+    # Do you have enough of each letter in your hand?
+    for key in word_hist:
+        # Failure if higher demand in word than hand
+        if word_hist[key] > hand[key]:
             return False
 
     return True
