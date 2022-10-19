@@ -10,7 +10,7 @@ import math
 import random
 import string
 
-VOWELS = 'aeiou'
+VOWELS = 'aeiou*'
 CONSONANTS = 'bcdfghjklmnpqrstvwxyz'
 HAND_SIZE = 7
 
@@ -143,7 +143,8 @@ def deal_hand(n):
     """
     
     hand={}
-    num_vowels = int(math.ceil(n / 3))
+    num_vowels = int(math.ceil(n / 3) - 1)
+    hand["*"] = 1
 
     for i in range(num_vowels):
         x = random.choice(VOWELS)
@@ -206,7 +207,58 @@ def is_valid_word(word, hand, word_list):
     
     word = word.lower()
     test_hand = hand.copy()
+    success = False
+    failed = False
 
+    # Make histogram for each letter in word
+    word_hist = {}
+    for letter in word:
+        # Set value of that key equal to either the current value plus one if it exists
+        # or 1 if it doesn't exist
+        word_hist[letter] = word_hist.get(letter, 0) + 1
+
+
+    # Wildcard?
+    if "*" in word:
+        # Check each vowel in place of wildcard
+        for vowel in VOWELS:
+            new_word = word.replace("*", vowel)
+            # If a match is found, indicate it and stop checking
+            if new_word in word_list:
+                success = True
+                saved_word = new_word
+                break
+        # None were found in word_list
+        if success == False:
+            # Invalid
+            return False
+        # Otherwise, wildcard worked
+        else: 
+            # Check each letter 
+            for letter in word:
+                # Is it in the hand?
+                if letter in hand.keys():
+                    # If so, does it have a non-zero value?
+                    if hand[letter] > 0:
+                        # If so, that letter is valid
+                        continue
+                    # Otherwise, the letter is 0 or less
+                    else:
+                        # Indicate that it failed and stop checking each letter
+                        failed = True
+                        break
+                # Otherwise, the letter is not in the hand
+                else:
+                    # Indicate that it failed and stop checking each letter
+                    failed = True
+                    break
+            # If each letter was checked and the program is still running,
+            # then every letter was in the hand and had a positive value.
+            # Valid
+            return True
+                
+# TODO: use word histogram to check if there are enough of each letter in hand
+    
     if word in word_list:
         for letter in word:
             if letter in hand.keys():
@@ -219,6 +271,9 @@ def is_valid_word(word, hand, word_list):
             return False
 
     return True
+            
+
+
 
 #
 # Problem #5: Playing a hand
