@@ -72,7 +72,6 @@ def get_word_score(word, n):
     returns: int >= 0
     """
     score = 0
-    word = word.lower()
     add = 7 * len(word) - 3 * (n - len(word))
 
     for i in range(len(word)):
@@ -160,8 +159,6 @@ def update_hand(hand, word):
     returns: dictionary (string -> int)
     """
 
-    word = word.lower()
-
     new_hand = hand.copy()
 
     for letter in word:
@@ -186,9 +183,6 @@ def is_valid_word(word, hand, word_list):
     word_list: list of lowercase strings
     returns: boolean
     """
-    
-    word = word.lower()
-    success = False
 
     # Make histogram for each letter in word
     word_hist = {}
@@ -196,24 +190,6 @@ def is_valid_word(word, hand, word_list):
         # Set value of that key equal to either the current value plus one if it exists
         # or 1 if it doesn't exist
         word_hist[letter] = word_hist.get(letter, 0) + 1
-
-
-    # Wildcard?
-    if "*" in word:
-        # Look for a replacement word in word_list
-        for vowel in VOWELS_DEAL:
-            new_word = word.replace("*", vowel)
-            # If a match is found, indicate it and stop checking
-            if new_word in word_list:
-                success = True
-                break
-        # None were found in word_list
-        if success == False:
-            # Invalid
-            return False
-    else:
-        if not word in word_list:
-            return False
 
     # Check if each letter in word is in hand
     for letter in word:
@@ -226,7 +202,19 @@ def is_valid_word(word, hand, word_list):
         if word_hist[key] > hand[key]:
             return False
 
-    return True
+    # Wildcard?
+    if "*" in word:
+        # Look for a replacement word in word_list
+        for vowel in VOWELS_DEAL:
+            new_word = word.replace("*", vowel)
+            # If a match is found, indicate it and stop checking
+            if new_word in word_list:
+                return True
+
+    # Not wildcard
+    else:
+        if word in word_list:
+            return True
             
 
 #
@@ -294,7 +282,7 @@ def play_hand(hand, word_list):
         display_hand(substituted_hand)
 
         # Ask user for input
-        word = input("Please enter word or \"!!\" to indicate that you are done: ")
+        word = input("Please enter word or \"!!\" to indicate that you are done: ").lower()
         # If the input is two exclamation points:
         if word == "!!":
             # End the game (break out of the loop)
@@ -307,7 +295,7 @@ def play_hand(hand, word_list):
             # If the word is valid:
             if is_valid_word(word, substituted_hand, word_list):
                 # Tell the user how many points the word earned,
-                print("\"", word, "\" earned", get_word_score(word, HAND_SIZE), "points. ", end="")
+                print(f'"{word}" earned {get_word_score(word, HAND_SIZE)} points. ', end="")
                 total_score += get_word_score(word, HAND_SIZE)
                 # and the updated total score
                 print("Total:", total_score, "points\n")
@@ -317,8 +305,6 @@ def play_hand(hand, word_list):
                 print("That is not a valid word. Please choose another word.")
                 
         # update the user's hand by removing the letters of their inputted word
-        # for letter in word:
-        #     hand[letter] -= 1
         hand = update_hand(substituted_hand, word)
             
     print("Ran out of letters")
