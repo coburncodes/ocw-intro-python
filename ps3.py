@@ -166,7 +166,7 @@ def update_hand(hand, word):
 
     for letter in word:
         if letter in hand.keys():
-            if hand[letter] > 0:
+            if new_hand[letter] > 0:
                 new_hand[letter] -= 1
     
     return new_hand
@@ -201,7 +201,7 @@ def is_valid_word(word, hand, word_list):
     # Wildcard?
     if "*" in word:
         # Look for a replacement word in word_list
-        for vowel in VOWELS:
+        for vowel in VOWELS_DEAL:
             new_word = word.replace("*", vowel)
             # If a match is found, indicate it and stop checking
             if new_word in word_list:
@@ -210,6 +210,9 @@ def is_valid_word(word, hand, word_list):
         # None were found in word_list
         if success == False:
             # Invalid
+            return False
+    else:
+        if not word in word_list:
             return False
 
     # Check if each letter in word is in hand
@@ -241,7 +244,7 @@ def calculate_handlen(hand):
 
     
 
-def play_hand(hand, word_list, n):
+def play_hand(hand, word_list):
 
     """
     Allows the user to play the given hand, as follows:
@@ -271,39 +274,41 @@ def play_hand(hand, word_list, n):
       returns: the total score for the hand
       
     """
-    decision = ""
-
-    # Keep track of the total score
     total_score = 0
-    # As long as there are still letters left in the hand:
-    if calculate_handlen(hand) > 0:
+
+    while calculate_handlen(hand) > 0:
         # Display the hand
-        print("Current Hand: ", end="") 
+        print("Current Hand: ", end="")
         display_hand(hand)
         # Ask if subs
-        while True:
-            decision = input("Would you like to substitute a letter? ").lower()
-            if decision == "no":
-                break
-            if decision == "yes":
-                letter = input("Which letter would you like to replace: ")
-                substitute_hand(hand, letter)
-                break
+        decision = input("Would you like to substitute a letter? ").lower()
+        print()
+        if decision == "yes":
+            letter = input("Which letter would you like to replace: ")
+            print()
+            substituted_hand = substitute_hand(hand, letter)
+        else:
+            substituted_hand = hand.copy()
+
+        print("Current hand: ", end="")
+        display_hand(substituted_hand)
 
         # Ask user for input
-        word = input("Enter word, or \"!!\" to indicate that you are finished: ")
+        word = input("Please enter word or \"!!\" to indicate that you are done: ")
         # If the input is two exclamation points:
         if word == "!!":
             # End the game (break out of the loop)
-            quit()
+            print("Total score for this hand:", total_score, "points")
+            print("----------")
+            return total_score
             
         # Otherwise (the input is not two exclamation points):
         else:
             # If the word is valid:
-            if is_valid_word(word, hand, word_list):
+            if is_valid_word(word, substituted_hand, word_list):
                 # Tell the user how many points the word earned,
-                print("\"", word, "\" earned", get_word_score(word, n), "points. ", end="")
-                total_score += get_word_score(word, n)
+                print("\"", word, "\" earned", get_word_score(word, HAND_SIZE), "points. ", end="")
+                total_score += get_word_score(word, HAND_SIZE)
                 # and the updated total score
                 print("Total:", total_score, "points\n")
             # Otherwise (the word is not valid):
@@ -311,13 +316,14 @@ def play_hand(hand, word_list, n):
                 # Reject invalid word (print a message)
                 print("That is not a valid word. Please choose another word.")
                 
-            # update the user's hand by removing the letters of their inputted word
-            for letter in word:
-                hand[letter] -= 1
-
-    # Game is over (user entered '!!' or ran out of letters),
-    # so tell user the total score
-    print("Total score:", total_score, "points")
+        # update the user's hand by removing the letters of their inputted word
+        # for letter in word:
+        #     hand[letter] -= 1
+        hand = update_hand(substituted_hand, word)
+            
+    print("Ran out of letters")
+    print("Total score for this hand:", total_score, "points")
+    print("----------")
 
     # Return the total score as result of function
     return total_score
@@ -426,13 +432,14 @@ def play_game(word_list):
     """
     
     num = int(input("Enter total number of hands: "))
+    total = 0
 
     while num > 0:
         hand = deal_hand(HAND_SIZE)
-        play_hand(hand, word_list, HAND_SIZE)
-        update_hand(hand, word)
-        # TODO: pickup from here
+        total += play_hand(hand, word_list)
         num -= 1
+    
+    print("Total score over all hands:", total)
 
     
 
