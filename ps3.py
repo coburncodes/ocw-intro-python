@@ -4,7 +4,7 @@
 # Created by: Kevin Luu <luuk> and Jenna Wiens <jwiens>
 #
 # Name          : Joe Coburn
-# Time spent    : 2022-10-18 2:30pm - 6:00pm (180)
+# Time spent    : 545 mins
 
 import math
 import random
