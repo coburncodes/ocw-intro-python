@@ -35,7 +35,10 @@ def get_permutations(sequence):
     # Take each entry and add to new list
     # print each entry in list
 
-        
+    # Start with any letter
+    # Add another letter (any) into every position
+    # Repeat above until nno more letters
+    # Print all entries 
 
     
 
