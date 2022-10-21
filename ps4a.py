@@ -24,6 +24,17 @@ def get_permutations(sequence):
     a different order than what is listed here.
     '''
 
+    # Start with the last letter
+        # [ "C" ]
+    # For each list, Take each entry and append next-last letter in sequence
+    # to ith position in a loop
+        # [ "BC" ] && [ "CB" ]
+    # For each list, Take each entry and append next-last letter in sequence
+    # to ith position in a loop
+        #  [ "ABC" ] [ "BAC" ] [ "BCA" ] && [ "ACB" ] [ "CAB" ] [ "CBA" ]
+    # Take each entry and add to new list
+    # print each entry in list
+
         
 
     
