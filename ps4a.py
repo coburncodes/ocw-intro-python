@@ -24,21 +24,44 @@ def get_permutations(sequence):
     a different order than what is listed here.
     '''
 
-    # Start with the last letter
-        # [ "C" ]
-    # For each list, Take each entry and append next-last letter in sequence
-    # to ith position in a loop
-        # [ "BC" ] && [ "CB" ]
-    # For each list, Take each entry and append next-last letter in sequence
-    # to ith position in a loop
-        #  [ "ABC" ] [ "BAC" ] [ "BCA" ] && [ "ACB" ] [ "CAB" ] [ "CBA" ]
-    # Take each entry and add to new list
-    # print each entry in list
-
     # Start with any letter
     # Add another letter (any) into every position
-    # Repeat above until nno more letters
+    # Repeat above until no more letters
     # Print all entries 
+
+    # Recursive case:
+    # Take sequence:
+    # Take letter
+        # "A"
+    # Include next letter before and after
+        # "BA" && "AB"
+    # Run program on new orders
+
+    x = "bust"
+
+    #   l = len(sequence)
+
+    #   for i in range(l):
+    #     if l > 1:
+    #       sequence_next = sequence[1:l]
+    #       get_permutations(sequence_next)
+        
+    #     else:
+    #       print(list(sequence))
+    #       return sequence
+
+
+    # Base case: 
+    # If seqeuence is single char, 
+    if len(sequence) == 1:
+        # Return singleton list containing sequence
+        return list(sequence)
+    # Recursive case:
+    else:
+        # Method that can give us a list of all permutations
+        # of all but the first character in the sequence
+        
+        
 
     
 
