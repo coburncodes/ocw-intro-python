@@ -1,7 +1,7 @@
 # Problem Set 4A
 # Name: Joe Coburn
 # Collaborators: n/a
-# Time Spent: 2:15pm - 
+# Time Spent: 400 mins
 
 def get_permutations(sequence):
     '''
@@ -18,50 +18,35 @@ def get_permutations(sequence):
     Example:
     >>> get_permutations('abc')
     ['abc', 'acb', 'bac', 'bca', 'cab', 'cba']
-    ['012', '021', '102', '120', '201', '210']
 
     Note: depending on your implementation, you may return the permutations in
     a different order than what is listed here.
     '''
 
-    # Start with any letter
-    # Add another letter (any) into every position
-    # Repeat above until no more letters
-    # Print all entries 
-
-    # Recursive case:
-    # Take sequence:
-    # Take letter
-        # "A"
-    # Include next letter before and after
-        # "BA" && "AB"
-    # Run program on new orders
-
-    x = "bust"
-
-    #   l = len(sequence)
-
-    #   for i in range(l):
-    #     if l > 1:
-    #       sequence_next = sequence[1:l]
-    #       get_permutations(sequence_next)
-        
-    #     else:
-    #       print(list(sequence))
-    #       return sequence
 
 
-    # Base case: 
-    # If seqeuence is single char, 
+    # Create list from sequence
+    sequence = list(sequence)
+    # Container to pass data
+    container = []
+
+    # Base case
     if len(sequence) == 1:
-        # Return singleton list containing sequence
-        return list(sequence)
-    # Recursive case:
-    else:
-        # Method that can give us a list of all permutations
-        # of all but the first character in the sequence
-        
-        
+        return [sequence]
+    # Recursive case
+    for i in range(len(sequence)):
+        # Save current letter and the rest of the sequence
+        current = sequence[i]
+        remaining = sequence[:i] + sequence[i+1:]
+
+        for j in get_permutations(remaining):
+            container.append([current] + remaining)
+
+    return container
+
+x = 'abc'
+for item in get_permutations(x):
+    print([item][0])
 
     
 
