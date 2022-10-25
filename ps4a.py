@@ -23,8 +23,6 @@ def get_permutations(sequence):
     a different order than what is listed here.
     '''
 
-
-
     # Create list from sequence
     sequence = list(sequence)
     # Container to pass data
@@ -39,27 +37,33 @@ def get_permutations(sequence):
         current = sequence[i]
         remaining = sequence[:i] + sequence[i+1:]
 
+        # Add the new permutation to the container
         for j in get_permutations(remaining):
-            container.append([current] + remaining)
+            container.append(''.join([current] + list(j)))
 
     return container
-
-x = 'abc'
-for item in get_permutations(x):
-    print([item][0])
 
     
 
 if __name__ == '__main__':
-#    #EXAMPLE
-#    example_input = 'abc'
-#    print('Input:', example_input)
-#    print('Expected Output:', ['abc', 'acb', 'bac', 'bca', 'cab', 'cba'])
-#    print('Actual Output:', get_permutations(example_input))
-    
 #    # Put three example test cases here (for your sanity, limit your inputs
 #    to be three characters or fewer as you will have n! permutations for a 
 #    sequence of length n)
 
-    pass #delete this line and replace with your code here
+#    #EXAMPLE
+    # example_input = 'abc'
+    # print('Input:', example_input)
+    # print('Expected Output:', ['abc', 'acb', 'bac', 'bca', 'cab', 'cba'])
+    # print('Actual Output:', get_permutations(example_input))
+
+    # example_input = 'xyz'
+    # print('Input:', example_input)
+    # print('Expected Output:', ['xyz', 'xzy', 'yxz', 'yzx', 'zxy', 'zyx'])
+    # print('Actual Output:', get_permutations(example_input))
+
+    # example_input = 'ocw'
+    # print('Input:', example_input)
+    # print('Expected Output:', ['ocw', 'owc', 'cow', 'cwo', 'wco', 'woc'])
+    # print('Actual Output:', get_permutations(example_input))
+    
 
