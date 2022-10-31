@@ -1,7 +1,7 @@
 # Problem Set 4B
-# Name: <your name here>
-# Collaborators:
-# Time Spent: x:xx
+# Name: Joe Coburn
+# Collaborators: n/a
+# Time Spent: 
 
 import string
 
@@ -57,7 +57,7 @@ def get_story_string():
 
 ### END HELPER CODE ###
 
-WORDLIST_FILENAME = 'words.txt'
+WORDLIST_FILENAME = 'words_ps4.txt'
 
 class Message(object):
     def __init__(self, text):
