@@ -70,7 +70,8 @@ class Message(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = None
 
     def get_message_text(self):
         '''
@@ -78,7 +79,7 @@ class Message(object):
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text
 
     def get_valid_words(self):
         '''
@@ -87,7 +88,8 @@ class Message(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
+        valid_words_copy = self.valid_words.copy()
+        return valid_words_copy
 
     def build_shift_dict(self, shift):
         '''
@@ -103,7 +105,22 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        pass #delete this line and replace with your code here
+
+        letters = list(string.ascii_letters)
+        shift_dict = {}
+
+        shift = shift % 26
+
+        for letter in letters:
+            shift_dict[letter] = chr(ord(letter) + shift)
+            if letter.isupper():
+                if ord(letter) + shift > 90:
+                    shift_dict[letter] = chr(ord(letter) + shift - 26)
+            else:
+                if ord(letter) + shift > 122:
+                    shift_dict[letter] = chr(ord(letter) + shift - 26)
+        
+
 
     def apply_shift(self, shift):
         '''
