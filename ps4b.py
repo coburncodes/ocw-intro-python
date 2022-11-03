@@ -236,9 +236,9 @@ class CiphertextMessage(Message):
         and the decrypted message text using that shift value
         '''
         high_count = 0
-        word_count = 0
         # Loop over every shift possibility
         for possible_shift in range(1, 27):
+            word_count = 0
             test_text = self.apply_shift(possible_shift)
             test_text = test_text.split()
             # Check every word (post-shift)
@@ -248,6 +248,7 @@ class CiphertextMessage(Message):
                     word_count += 1
             # After every word is counted, save if highest word count
                     if word_count > high_count:
+                        high_count = word_count
                         key = possible_shift
                         decoded = self.apply_shift(key)
 
@@ -290,6 +291,7 @@ if __name__ == '__main__':
     print('Actual Output:', ciphertext.decrypt_message())
 
 
-    #TODO: best shift value and unencrypted story 
-    
+    # best shift value and unencrypted story 
+    ciphertext = CiphertextMessage(get_story_string())
+    print('Story:', ciphertext.decrypt_message())
     
