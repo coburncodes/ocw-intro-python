@@ -3,6 +3,7 @@
 # Collaborators: n/a
 # Time Spent: 
 
+from os import cpu_count
 import string
 
 ### HELPER CODE ###
@@ -213,7 +214,7 @@ class CiphertextMessage(Message):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        Message.__init__(self, text)
 
     def decrypt_message(self):
         '''
@@ -231,7 +232,29 @@ class CiphertextMessage(Message):
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         '''
-        pass #delete this line and replace with your code here
+        high_count = 0
+        word_count = 0
+        # Load word list
+        word_list = load_words(WORDLIST_FILENAME)
+        # Loop over every shift possibility
+        for possible_shift in range(25):
+            test_text = self.apply_shift(possible_shift)
+            test_text = test_text.split()
+            # Check every word (post-shift)
+            for word in test_text:
+                # Increment counter if word is found
+                if is_word(word_list, word):
+                    word_count += 1
+            # After every word is counted, save if highest word count
+                    if word_count > high_count:
+                        key = possible_shift
+                        decoded = self.apply_shift(key)
+
+        decrypted = tuple(key, decoded)
+        
+        return decrypted
+            
+
 
 if __name__ == '__main__':
 
