@@ -121,7 +121,7 @@ class Message(object):
                 if ord(letter) + shift > 122:
                     shift_dict[letter] = chr(ord(letter) + shift - 26)
         
-
+        return shift_dict
 
     def apply_shift(self, shift):
         '''
@@ -135,13 +135,16 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        shift_dict = self.build_shift_dict(self, shift)
+        shift_dict = self.build_shift_dict(shift)
+        new_message = []
 
-        for letter in self.get_message_text(self):
+        for letter in self.get_message_text():
             if letter.isalpha():
-                letter = shift_dict[letter]
+                new_message.append(shift_dict[letter])
+            else:
+                new_message.append(letter)
 
-        return self.message_text
+        return ''.join(new_message)
 
 class PlaintextMessage(Message):
     def __init__(self, text, shift):
@@ -161,8 +164,8 @@ class PlaintextMessage(Message):
         '''
         Message.__init__(self, text)
         self.shift = shift
-        self.encryption_dict = Message.build_shift_dict(Message, shift)
-        self.message_text_encrypted = Message.apply_shift(Message, shift)
+        self.encryption_dict = self.build_shift_dict(shift)
+        self.message_text_encrypted = self.apply_shift(shift)
 
     def get_shift(self):
         '''
@@ -234,42 +237,59 @@ class CiphertextMessage(Message):
         '''
         high_count = 0
         word_count = 0
-        # Load word list
-        word_list = load_words(WORDLIST_FILENAME)
         # Loop over every shift possibility
-        for possible_shift in range(25):
+        for possible_shift in range(1, 27):
             test_text = self.apply_shift(possible_shift)
             test_text = test_text.split()
             # Check every word (post-shift)
             for word in test_text:
                 # Increment counter if word is found
-                if is_word(word_list, word):
+                if is_word(self.valid_words, word):
                     word_count += 1
             # After every word is counted, save if highest word count
                     if word_count > high_count:
                         key = possible_shift
                         decoded = self.apply_shift(key)
 
-        decrypted = tuple(key, decoded)
-        
+        decrypted = (key, decoded)
+
         return decrypted
             
 
 
 if __name__ == '__main__':
 
-#    #Example test case (PlaintextMessage)
-#    plaintext = PlaintextMessage('hello', 2)
-#    print('Expected Output: jgnnq')
-#    print('Actual Output:', plaintext.get_message_text_encrypted())
-#
-#    #Example test case (CiphertextMessage)
-#    ciphertext = CiphertextMessage('jgnnq')
-#    print('Expected Output:', (24, 'hello'))
-#    print('Actual Output:', ciphertext.decrypt_message())
+    # Example test case (PlaintextMessage)
+    # plaintext = PlaintextMessage('hello', 2)
+    # print('Expected Output: jgnnq')
+    # print('Actual Output:', plaintext.get_message_text_encrypted())
 
-    #TODO: WRITE YOUR TEST CASES HERE
+    # Example test case (CiphertextMessage)
+    # ciphertext = CiphertextMessage('jgnnq')
+    # print('Expected Output:', (24, 'hello'))
+    # print('Actual Output:', ciphertext.decrypt_message())
+
+    # PlaintextMessage Test Case #1
+    plaintext = PlaintextMessage('ocw rules!', 1)
+    print('Expected Output: pdx svmft!')
+    print('Actual Output:', plaintext.get_message_text_encrypted())
+
+    # PlaintextMessage Test Case #2
+    plaintext = PlaintextMessage('Hello, world!!', 10)
+    print('Expected Output: Rovvy, gybvn!!')
+    print('Actual Output:', plaintext.get_message_text_encrypted())
+
+    # CiphertextMessage Test Case #1
+    ciphertext = CiphertextMessage('Jcxfjt Ctl Ndgz')
+    print('Expected Output:', (11, 'Unique New York'))
+    print('Actual Output:', ciphertext.decrypt_message())
+
+    # CiphertextMessage Test Case #2
+    ciphertext = CiphertextMessage('htij nx httq!')
+    print('Expected Output:', (21, 'code is cool!'))
+    print('Actual Output:', ciphertext.decrypt_message())
+
 
     #TODO: best shift value and unencrypted story 
     
-    pass #delete this line and replace with your code here
+    
