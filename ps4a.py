@@ -45,7 +45,7 @@ def get_permutations(sequence):
 
     
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 #    # Put three example test cases here (for your sanity, limit your inputs
 #    to be three characters or fewer as you will have n! permutations for a 
 #    sequence of length n)
