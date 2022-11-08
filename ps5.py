@@ -137,7 +137,40 @@ class Trigger(object):
 # PHRASE TRIGGERS
 
 # Problem 2
-# TODO: PhraseTrigger
+class PhaseTrigger(Trigger):
+    def __init__(self, phrase):
+        self.phrase = phrase
+
+    def contains(self, text):
+        text_no_punctuation = []
+        text = [*text]
+
+        # create list of text without punctuation or spaces
+        for char in text:
+            if char not in string.punctuation:
+                text_no_punctuation.append(char)
+            else:
+                text_no_punctuation.append(' ')
+        text_no_punctuation = ''.join(text_no_punctuation)
+
+        text_simplified = text_no_punctuation.split()
+
+        # create list of phrase without punctuation or spaces
+        for char in self.phrase:
+            if char not in string.punctuation:
+                phrase_no_punctuation.append(char)
+            else:
+                phrase_no_punctuation.append(' ')
+        phrase_no_punctuation = ''.join(phrase_no_punctuation)
+
+        phrase_simplified = phrase_no_punctuation.split()
+
+        # Check if text contains phrase
+        if phrase_simplified not in text_simplified:
+            return False
+        else:
+            return True
+
 
 # Problem 3
 # TODO: TitleTrigger
