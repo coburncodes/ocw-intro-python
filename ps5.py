@@ -208,12 +208,30 @@ class AfterTrigger(TimeTrigger):
 
 # Problem 7
 # TODO: NotTrigger
+class NotTrigger(Trigger):
+    def __init__(self, T):
+        self.T = T
+
+    def evaluate(self, story):
+        return not self.T.evaluate(story)
 
 # Problem 8
-# TODO: AndTrigger
+class AndTrigger(Trigger):
+    def __init__(self, T, U):
+        self.T = T
+        self.U = U
+    
+    def evaluate(self, story):
+        return self.T.evaluate(story) and self.U.evaluate(story)
 
 # Problem 9
-# TODO: OrTrigger
+class OrTrigger(Trigger):
+    def __init__(self, T, U):
+        self.T = T
+        self.U = U
+    
+    def evaluate(self, story):
+        return self.T.evaluate(story) or self.U.evaluate(story)
 
 
 #======================
