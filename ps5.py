@@ -54,7 +54,71 @@ def process(url):
 
 # Problem 1
 
-# TODO: NewsStory
+class NewsStory(object):
+    '''
+    Initializes a NewsStory object
+            
+    guid (string): the story's globally unique identifier
+    title (string): the story's title
+    description (string): the story's description
+    link (string): story's link to more content
+    pubdate (datetime): story's publication date
+
+    A NewsStory object has five attributes:
+        self.guid 
+        self.title
+        self.description
+        self.link
+        self.pubdate
+    '''
+    def __init__(self, guid, title, description, link, pubdate):
+        self.guid = guid
+        self.title = title
+        self.description = description
+        self.link = link
+        self.pubdate = pubdate
+
+    def get_guid(self):
+        '''
+        Used to safely access self.guid outside of the class
+        
+        Returns: self.guid
+        '''
+        return self.guid
+
+    def get_title(self):
+        '''
+        Used to safely access self.title outside of the class
+        
+        Returns: self.title
+        '''
+        return self.title
+
+    def get_description(self):
+        '''
+        Used to safely access self.description outside of the class
+        
+        Returns: self.description
+        '''
+        return self.description
+
+    def get_link(self):
+        '''
+        Used to safely access self.link outside of the class
+        
+        Returns: self.link
+        '''
+        return self.link
+
+    def get_pubdate(self):
+        '''
+        Used to safely access self.pubdate outside of the class
+        
+        Returns: self.pubdate
+        '''
+        return self.pubdate
+
+    
 
 
 #======================
@@ -201,7 +265,7 @@ def main_thread(master):
             stories = process("http://news.google.com/news?output=rss")
 
             # Get stories from Yahoo's Top Stories RSS news feed
-            stories.extend(process("http://news.yahoo.com/rss/topstories"))
+            # stories.extend(process("http://news.yahoo.com/rss/topstories"))
 
             stories = filter_stories(stories, triggerlist)
 
