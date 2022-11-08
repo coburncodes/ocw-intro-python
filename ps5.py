@@ -137,12 +137,13 @@ class Trigger(object):
 # PHRASE TRIGGERS
 
 # Problem 2
-class PhaseTrigger(Trigger):
+class PhraseTrigger(Trigger):
     def __init__(self, phrase):
-        self.phrase = phrase
+        self.phrase = phrase.lower()
 
-    def contains(self, text):
+    def is_phrase_in(self, text):
         text_no_punctuation = []
+        text = text.lower()
         text = [*text]
 
         # create list of text without punctuation or spaces
@@ -173,10 +174,14 @@ class PhaseTrigger(Trigger):
 
 
 # Problem 3
-# TODO: TitleTrigger
+class TitleTrigger(PhraseTrigger):
+    def evaluate(self, story):
+        return self.is_phrase_in(story.get_title())
 
 # Problem 4
-# TODO: DescriptionTrigger
+class DescriptionTrigger(PhraseTrigger):
+    def evaluate(self, story):
+        return self.is_phrase_in(story.get_description())
 
 # TIME TRIGGERS
 
