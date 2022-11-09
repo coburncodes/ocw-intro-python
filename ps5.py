@@ -245,10 +245,15 @@ def filter_stories(stories, triggerlist):
 
     Returns: a list of only the stories for which a trigger in triggerlist fires.
     """
-    # TODO: Problem 10
-    # This is a placeholder
-    # (we're just returning all the stories, with no filtering)
-    return stories
+    filtered = []
+
+    for story in stories:
+        for item in triggerlist:
+            if item.evaluate(story):
+                filtered.append(story)
+                break
+
+    return filtered
 
 
 
@@ -272,9 +277,20 @@ def read_trigger_config(filename):
         if not (len(line) == 0 or line.startswith('//')):
             lines.append(line)
 
-    # TODO: Problem 11
     # line is the list of lines that you need to parse and for which you need
     # to build triggers
+
+    trigger_mapping = {
+        "TITLE": TitleTrigger,
+        "DESCRIPTION": DescriptionTrigger,
+        "AFTER": AfterTrigger,
+        "BEFORE": BeforeTrigger,
+        "NOT": NotTrigger,
+        "AND": AndTrigger,
+        "OR": OrTrigger
+    }
+
+
 
     print(lines) # for now, print it so you see what it contains!
 
