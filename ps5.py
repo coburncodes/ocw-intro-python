@@ -11,6 +11,7 @@ from project_util import translate_html
 from mtTkinter import *
 from datetime import datetime
 import pytz
+import re
 
 
 #-----------------------------------------------------------------------
@@ -143,6 +144,7 @@ class PhraseTrigger(Trigger):
 
     def is_phrase_in(self, text):
         text_no_punctuation = []
+        phrase_no_punctuation = []
         text = text.lower()
         text = [*text]
 
@@ -152,9 +154,9 @@ class PhraseTrigger(Trigger):
                 text_no_punctuation.append(char)
             else:
                 text_no_punctuation.append(' ')
-        text_no_punctuation = ''.join(text_no_punctuation)
+        text_no_punctuation = ' '.join(''.join(text_no_punctuation).split())
+        # text_stripped = 
 
-        text_simplified = text_no_punctuation.split()
 
         # create list of phrase without punctuation or spaces
         for char in self.phrase:
@@ -162,15 +164,11 @@ class PhraseTrigger(Trigger):
                 phrase_no_punctuation.append(char)
             else:
                 phrase_no_punctuation.append(' ')
-        phrase_no_punctuation = ''.join(phrase_no_punctuation)
+        phrase_no_punctuation = ' '.join(''.join(phrase_no_punctuation).split())
 
-        phrase_simplified = phrase_no_punctuation.split()
 
         # Check if text contains phrase
-        if phrase_simplified not in text_simplified:
-            return False
-        else:
-            return True
+        return re.search(r"\b{}\b".format(phrase_no_punctuation), text_no_punctuation, re.IGNORECASE) is not None
 
 
 # Problem 3
@@ -290,9 +288,15 @@ def read_trigger_config(filename):
         "OR": OrTrigger
     }
 
+    trigger_dict = {}
+    trigger_list = []
 
 
-    print(lines) # for now, print it so you see what it contains!
+
+    # for line in lines:
+        
+
+    # print(lines) # for now, print it so you see what it contains!
 
 
 
