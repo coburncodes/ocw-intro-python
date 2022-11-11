@@ -291,9 +291,9 @@ def read_trigger_config(filename):
     trigger_dict = {}
     trigger_list = []
 
+    # TODO:
+    # Finish implementing problem 11
 
-
-    # for line in lines:
         
 
     # print(lines) # for now, print it so you see what it contains!
